@@ -11,3 +11,16 @@
 .outer_bg {
   background: linear-gradient(180deg, #cbeff3 0%, #b6cde8 100%);
 }
+
+.gradient-purple {
+  background: linear-gradient(
+    106.52deg,
+    #a282e8 -11.57%,
+    #7e8ee7 50.39%,
+    #4499e9 116.35%
+  );
+}
+
+*::-webkit-scrollbar {
+  display: none;
+}
