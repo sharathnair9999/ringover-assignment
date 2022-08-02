@@ -7,6 +7,7 @@ import Leads from "./Leads/Leads";
 import Customs from "./Customs/Customs";
 import AccountsContacts from "./AccountsContacts/AccountsContacts";
 import SearchField from "./SearchField";
+import SalesforceItem from "./SalesforceItem";
 
 export {
   MainLogo,
@@ -18,4 +19,5 @@ export {
   AccountsContacts,
   Customs,
   SearchField,
+  SalesforceItem,
 };

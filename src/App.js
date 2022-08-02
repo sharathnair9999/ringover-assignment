@@ -7,8 +7,55 @@ import {
   QuickView,
 } from "./components";
 import { Route, Routes } from "react-router-dom";
+import { DragDropContext } from "react-beautiful-dnd";
+import { useRingover } from "./contexts/ringover-context";
 
 function App() {
+  const {
+    state: { ringoverCadence },
+    sendbackSalesforceItem,
+    addToCadence,
+  } = useRingover();
+  const onDragEnd = (result) => {
+    const { source, destination, draggableId } = result;
+    let itemToSendBack;
+    // Invalid cases while doing drag and drop
+
+    // Case 1 : If destination is not a droppable context
+    if (!destination) return;
+
+    // Case 2 : If destination is the same droppable context
+    if (
+      source.droppableId === "salesforceData" &&
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+    // Case 3 : If the source and destination is the cadence itself
+    if (Object.keys(ringoverCadence).includes(destination.droppableId)) {
+      // Case 1 : The destination doesnt have any corresponding value attached
+      if (!ringoverCadence[destination.droppableId].data.data) {
+        // Case 2 : The destination has a value attached.
+      } else {
+        return;
+      }
+    }
+    if (destination.droppableId === "salesforceData") {
+      itemToSendBack = {
+        field: source.droppableId,
+        data: ringoverCadence[source.droppableId].data,
+      };
+      sendbackSalesforceItem(itemToSendBack);
+    }
+    if (
+      Object.keys(ringoverCadence).some(
+        (val) => val === destination.droppableId
+      )
+    ) {
+      addToCadence(destination.droppableId, draggableId);
+    }
+  };
   return (
     <>
       <MainLogo />
@@ -21,7 +68,14 @@ function App() {
               <div className="ringover-salesforce__view p-px bg-blackLight  h-5/6 overflow-hidden rounded-lg flex">
                 <Routes>
                   <Route path="/">
-                    <Route index element={<Leads />} />
+                    <Route
+                      index
+                      element={
+                        <DragDropContext onDragEnd={onDragEnd}>
+                          <Leads />
+                        </DragDropContext>
+                      }
+                    />
                     <Route
                       path="accounts-contacts"
                       element={<AccountsContacts />}

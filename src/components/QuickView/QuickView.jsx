@@ -9,10 +9,18 @@ import { FaBriefcase } from "react-icons/fa";
 import { BsPhoneFill } from "react-icons/bs";
 import { AiFillHome, AiFillCaretDown } from "react-icons/ai";
 import { IoMailSharp } from "react-icons/io5";
+import QuickViewItem from "./QuickViewItem";
+import { useRingover } from "../../contexts/ringover-context";
 
 const QuickView = () => {
+  const {
+    state: { quickViewData },
+  } = useRingover();
+
   return (
-    <div className="quick-view h-[calc(100vh-13rem)] overflow-auto shadow-lg rounded-lg flex justify-center w-full items-center flex-col gap-1">
+    <div
+      className={`quick-view h-[calc(100vh-13rem)] overflow-auto shadow-lg rounded-lg flex justify-center w-full items-center flex-col gap-1`}
+    >
       <Options />
       <div className="quick-view--socials flex justify-center mt-2 gap-2">
         <span className="flex justify-center items-center bg-[#00A1E0] rounded-lg p-2">
@@ -25,28 +33,40 @@ const QuickView = () => {
           <TiAttachment size={"1rem"} color="white" />
         </span>
       </div>
-      <p className="name_section text-lg font-bold flex items-center justify-center">
-        <span>First_name</span>
-        <span className="pl-2 pr-1">Last_name</span>
+      <p className="name_section flex items-center justify-center">
+        <QuickViewItem
+          field={quickViewData["first_name"]}
+          className="text-lg font-bold "
+        />
+        <QuickViewItem
+          className="pl-2 pr-1 font-bold"
+          field={quickViewData["last_name"]}
+        />
         <FiGlobe className="text-black1" />
       </p>
       <p className="text-sm flex items-center gap-2">
         <FaBriefcase />
-        <span>job_position at account_name with employee_number employees</span>
+        <span>
+          <QuickViewItem field={quickViewData.job_position} /> at{" "}
+          <QuickViewItem field={quickViewData.account_name} /> with{" "}
+          <QuickViewItem field={quickViewData.employee_number} /> employees
+        </span>
       </p>
       <p className=" text-sm flex items-center gap-2">
         <IoMailSharp />
-        <span>{`primary_email_id (4)`}</span>
+        <QuickViewItem field={quickViewData.primary_email_id} />
+        {" (4)"}
         <AiFillCaretDown />
       </p>
       <p className=" text-sm flex items-center gap-2">
         <BsPhoneFill />
-        <span>{`primary_phone (4)`}</span>
+        <QuickViewItem field={quickViewData.primary_phone} />
+        {" (4)"}
         <AiFillCaretDown />
       </p>
       <p className=" text-sm flex items-center gap-2">
         <AiFillHome />
-        <span>{`account_phone`}</span>
+        <QuickViewItem field={quickViewData.account_phone} />
       </p>
 
       <img

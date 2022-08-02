@@ -1,45 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Droppable } from "react-beautiful-dnd";
+import { useRingover } from "../../contexts/ringover-context";
+import { arrangeSFData } from "../../utils/arrangeSFData";
+import SalesforceItem from "../SalesforceItem";
 import SearchField from "../SearchField";
+import RingoverField from "./RingoverField";
 
 const Leads = () => {
-  const salesforceData = [
-    "Account Number",
-    "Account Name",
-    "Account Type",
-    "Build Version",
-    "Body",
-    "Enumeration",
-    "BaseCE",
-    "Customer Name",
-    "Data Types",
-  ];
-  const ringoverData = [
-    "account_name",
-    "first_name",
-    "last_name",
-    "primary_email_id",
-    "primary_phone",
-    "employee_number",
-    "job_position",
-  ];
-  const [salesForceFields, setSalesForceFields] = useState([]);
+  const {
+    state: { salesforceData, ringoverCadence, selectedSFData },
+    sendbackSalesforceItem,
+    handleSFClick,
+  } = useRingover();
+
   const [salesforceSearch, setSalesforceSearch] = useState("");
   const [ringoverSearch, setRingoverSearch] = useState("");
-  const sortedData = [
-    ...new Set(
-      salesforceData
-        .filter((word) =>
-          word.toLowerCase().startsWith(salesforceSearch.toLowerCase())
-        )
-        .map((word) => word)
-        .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0))
-    ),
-  ].reduce((acc, curr) => {
-    if (!acc.hasOwnProperty(curr[0])) {
-      acc = { ...acc, [curr[0]]: [curr] };
-    } else acc = { ...acc, [curr[0]]: [...acc[curr[0]], curr] };
-    return acc;
-  }, {});
+
+  const sortedSalesforceData = arrangeSFData(salesforceData, salesforceSearch);
+
+  useEffect(() => {
+    const handleKeyDown1 = (e) => {
+      if (e.key === "Backspace" && selectedSFData.data.data !== "") {
+        console.log(selectedSFData);
+        sendbackSalesforceItem(selectedSFData);
+        handleSFClick([selectedSFData.field]);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown1);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown1);
+    };
+  }, [sendbackSalesforceItem, selectedSFData, handleSFClick]);
+
   return (
     <>
       <div className="gap-2 ringover w-3/4  flex p-3 justify-start items-center flex-col">
@@ -48,51 +40,50 @@ const Leads = () => {
           searchTerm={ringoverSearch}
           setSearch={setRingoverSearch}
         />
-        <div className="flex-grow flex justify-center items-start  w-full ">
-          <div className="flex-grow flex flex-col justify-start items-center gap-4 overflow-auto h-[calc(100%-2rem)]">
+        <div className="flex-grow flex justify-start items-center flex-col h-[calc(100%-2rem)] w-full">
+          <section className="flex justify-evenly items-start w-full relative">
             <p className="text-lightBlue2">Ringover Fields</p>
-            {ringoverData.map((field) => (
-              <span
-                className="text-purple bg-white rounded-lg p-2 w-10/12 text-center"
-                key={field}
-              >
-                {field}
-              </span>
-            ))}
-          </div>
-          <div className="flex-grow flex flex-col justify-start items-center gap-4 overflow-auto h-[calc(100%-2rem)]">
             <p className="text-lightBlue2">Salesforce Fields</p>
-            {salesForceFields.length === 0 && (
-              <span className="border border-dashed rounded-md p-2 text-lightBlue2/50 w-10/12 text-center">
-                Place here
-              </span>
-            )}
+            <p className="absolute right-[25%] flex translate-x-1/2  bottom-0 top-10  rounded-lg p-2 text-lightBlue2/50 ">
+              <span className="inline-block mb-30">Place Here</span>
+            </p>
+          </section>
+
+          <div className="flex flex-col w-11/12 gap-2 justify-center mt-2">
+            {Object.entries(ringoverCadence)
+              .filter((field) =>
+                field[0].toLowerCase().startsWith(ringoverSearch.toLowerCase())
+              )
+              .map((entry, ind) => (
+                <RingoverField key={entry[0]} field={entry} index={ind} />
+              ))}
           </div>
         </div>
       </div>
-      <div className="salesforce w-1/4 bg-white  flex p-3 justify-start items-start flex-col gap-2 overflow-auto">
-        <p className="font-semibold text-md">Salesforce</p>
-        <SearchField
-          searchTerm={salesforceSearch}
-          setSearch={setSalesforceSearch}
-        />
-        {Object.entries(sortedData).map(([letter, values], ind) => {
-          return (
-            <div className="flex pb-1 flex-col gap-2 w-full" key={letter}>
-              <p className="pt-2">{letter}</p>
-              {values.map((val) => (
-                <div
-                  key={val}
-                  className="cursor-pointer hover:bg-slate-200 flex justify-start items-center gap-4 bg-lightBlue px-3 w-full py-1 rounded-xl text-purple "
-                >
-                  <span className="w-2 h-[90%] bg-white rounded-md "></span>
-                  <p className="">{val}</p>
-                </div>
-              ))}
-            </div>
-          );
-        })}
-      </div>
+      <Droppable droppableId="salesforceData">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="salesforce w-1/4 bg-white  flex p-3 justify-start items-start flex-col gap-2 overflow-auto"
+          >
+            <p className="font-semibold text-md">Salesforce</p>
+            <SearchField
+              searchTerm={salesforceSearch}
+              setSearch={setSalesforceSearch}
+            />
+            {Object.entries(sortedSalesforceData).map(([letter, values]) => (
+              <div className="flex pb-1 flex-col gap-2 w-full" key={letter}>
+                <p className="pt-2">{letter}</p>
+                {values.map((val, ind) => (
+                  <SalesforceItem val={val} key={val.id} index={ind} />
+                ))}
+              </div>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
     </>
   );
 };
