@@ -38,36 +38,58 @@ function App() {
       Object.keys(ringoverCadence).includes(source.droppableId) &&
       Object.keys(ringoverCadence).includes(destination.droppableId)
     ) {
-      // Case 0 : If the source and destination are the same
+      console.log("case3");
+      console.log({ source, destination, draggableId });
+      // Case 3-0 : If the source and destination are the same
       if (source.droppableId === destination.droppableId) {
         return;
       }
 
-      // Case 1 : The destination doesnt have any corresponding value attached
+      // Case 3-1 : The destination doesnt have any corresponding value attached
       if (!ringoverCadence[destination.droppableId].data.data) {
         moveWithinCadence(true, source.droppableId, destination.droppableId);
         return;
       }
 
-      // Case 2 : The destination has a value attached.
+      // Case 3-2 : The destination has a value attached.
       else {
         moveWithinCadence(false, source.droppableId, destination.droppableId);
         return;
       }
     }
+
+    // Case 4 : Dropping back the item from Cadence to Salesforce
     if (destination.droppableId === "salesforceData") {
+      console.log("case4");
+      console.log({ source, destination, draggableId });
       itemToSendBack = {
         field: source.droppableId,
         data: ringoverCadence[source.droppableId].data,
       };
       sendbackSalesforceItem(itemToSendBack);
     }
+
+    // Case 5 : Adding to cadence from salesforce
     if (
+      source.droppableId === "salesforceData" &&
       Object.keys(ringoverCadence).some(
         (val) => val === destination.droppableId
-      )
+      ) &&
+      !ringoverCadence[destination.droppableId].data.data
     ) {
+      console.log("case5");
+      console.log({ source, destination, draggableId });
       addToCadence(destination.droppableId, draggableId);
+    }
+    // Case 6 : If tried to add from salesforce to a cadence where already something exists, just return
+    if (
+      source.droppableId === "salesforceData" &&
+      Object.keys(ringoverCadence).some(
+        (val) => val === destination.droppableId
+      ) &&
+      ringoverCadence[destination.droppableId].data.data
+    ) {
+      return;
     }
   };
   return (

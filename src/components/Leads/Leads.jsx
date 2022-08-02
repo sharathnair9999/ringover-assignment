@@ -43,7 +43,7 @@ const Leads = () => {
           searchTerm={ringoverSearch}
           setSearch={setRingoverSearch}
         />
-        <div className="flex-grow flex justify-start items-center flex-col h-[calc(100%-2rem)] w-full">
+        <div className="flex-grow flex justify-start items-center mt-2 flex-col h-[calc(100%-2rem)] w-full">
           <section className="flex justify-evenly items-start w-full relative">
             <p className="text-lightBlue2">Ringover Fields</p>
             <p className="text-lightBlue2">Salesforce Fields</p>
