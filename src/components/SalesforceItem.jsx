@@ -9,10 +9,9 @@ const SalesforceItem = ({ val, index }) => {
           {...provided.dragHandleProps}
           {...provided.draggableProps}
           ref={provided.innerRef}
-          className="cursor-pointer hover:bg-slate-200 flex justify-start items-center gap-4 bg-lightBlue px-3 w-full py-1 rounded-xl text-purple "
+          className="cursor-pointer after:absolute after:content-[''] text-center after:w-2 after:h-[70%] after:left-3 after:rounded-md after:bg-white  relative hover:bg-slate-200 gap-4 bg-lightBlue px-3 w-full py-1 rounded-xl text-purple "
         >
-          <span className="w-2 h-[90%] bg-white rounded-md "></span>
-          <p>{val.data}</p>
+          {val.data}
         </div>
       )}
     </Draggable>

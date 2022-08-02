@@ -17,8 +17,8 @@ const QuickViewItem = ({ field, className = "" }) => {
       className={`${className} ${
         hoveredItem.toLowerCase() === field.toLowerCase() &&
         inRingoverCadence &&
-        "bg-white z-20 font-bold scale-110 rounded-md px-2 cursor-pointer"
-      } ${!inRingoverCadence && "text-gray-500/80 cursor-not-allowed"} `}
+        " z-10 font-semibold scale-110 rounded-md cursor-pointer"
+      } ${!inRingoverCadence && "text-gray-400/80 cursor-not-allowed"} `}
     >
       {field}
     </span>

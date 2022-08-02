@@ -101,7 +101,7 @@ function App() {
             <NavLinks />
             <div className=" h-full w-full grid grid-cols-mainBody mt-4 gap-8">
               <QuickView />
-              <div className="ringover-salesforce__view p-px bg-blackLight  h-5/6 overflow-hidden rounded-lg flex">
+              <div className="ringover-salesforce__view p-[2px] bg-blackLight  h-5/6 overflow-hidden rounded-l-lg flex">
                 <Routes>
                   <Route path="/">
                     <Route

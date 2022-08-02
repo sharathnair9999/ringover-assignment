@@ -23,7 +23,7 @@ const QuickView = () => {
         Object.keys(ringoverCadence).some(
           (item) => item.toLowerCase() === hoveredItem.toLowerCase()
         ) &&
-        "after:absolute after:w-full after:h-full after:bg-gray-100/90 transition-all after:transition-all  after:text-gray-300"
+        "after:absolute after:w-full after:h-full after:bg-gray-100/80 transition-all after:transition-all  after:text-gray-300"
       }  flex-col gap-1`}
     >
       <Options />
@@ -49,25 +49,25 @@ const QuickView = () => {
         />
         <FiGlobe className="text-black1" />
       </p>
-      <p className="text-sm flex items-center justify-center flex-wrap gap-2">
+      <p className="text-xs flex items-center justify-center flex-wrap gap-2">
         <FaBriefcase />
         <QuickViewItem field={quickViewData.job_position} /> at{" "}
         <QuickViewItem field={quickViewData.account_name} /> with{" "}
         <QuickViewItem field={quickViewData.employee_number} /> employees
       </p>
-      <p className=" text-sm flex items-center gap-2">
+      <p className=" text-xs flex items-center gap-2">
         <IoMailSharp />
         <QuickViewItem field={quickViewData.primary_email_id} />
         {" (4)"}
         <AiFillCaretDown />
       </p>
-      <p className=" text-sm flex items-center gap-2">
+      <p className=" text-xs flex items-center gap-2">
         <BsPhoneFill />
         <QuickViewItem field={quickViewData.primary_phone} />
         {" (4)"}
         <AiFillCaretDown />
       </p>
-      <p className=" text-sm flex items-center gap-2">
+      <p className=" text-xs flex items-center gap-2">
         <AiFillHome />
         <QuickViewItem field={quickViewData.account_phone} />
       </p>

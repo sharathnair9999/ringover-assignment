@@ -20,9 +20,9 @@ const RingoverField = ({ field, index }) => {
           <span
             onMouseEnter={() => mouseEnterInCadence(field[0])}
             onMouseLeave={() => mouseLeaveInCadence(field[0])}
-            className={`text-purple bg-white rounded-lg p-2  w-1/2 text-center ${
+            className={`text-purple bg-white rounded-lg p-2 relative after:absolute after:content-[''] after:transition-all hover:after:bg-[#eef2fc]  after:w-10 after:h-[65%] after:top-1/2 after:-translate-y-1/2 after:bg-white after:rounded-lg after:-right-3 after:z-20 w-1/2 text-center cursor-pointer ${
               hoveredItem.toLowerCase() === field[0].toLowerCase() &&
-              "bg-purple/10 scale-110 transition-all rounded-xl z-20"
+              "bg-[#eef2fc] scale-110 transition-all rounded-xl z-20"
             }`}
           >
             {field[0]}
