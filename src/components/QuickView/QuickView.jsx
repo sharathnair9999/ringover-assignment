@@ -14,12 +14,17 @@ import { useRingover } from "../../contexts/ringover-context";
 
 const QuickView = () => {
   const {
-    state: { quickViewData },
+    state: { quickViewData, hoveredItem, ringoverCadence },
   } = useRingover();
 
   return (
     <div
-      className={`quick-view h-[calc(100vh-13rem)] overflow-auto shadow-lg rounded-lg flex justify-center w-full items-center flex-col gap-1`}
+      className={`quick-view h-[calc(100vh-13rem)] overflow-auto shadow-lg rounded-lg flex justify-center w-full items-center relative ${
+        Object.keys(ringoverCadence).some(
+          (item) => item.toLowerCase() === hoveredItem.toLowerCase()
+        ) &&
+        "after:absolute after:w-full after:h-full after:bg-gray-100/90 transition-all after:transition-all  after:text-gray-300"
+      }  flex-col gap-1`}
     >
       <Options />
       <div className="quick-view--socials flex justify-center mt-2 gap-2">
@@ -35,22 +40,20 @@ const QuickView = () => {
       </div>
       <p className="name_section flex items-center justify-center">
         <QuickViewItem
-          field={quickViewData["first_name"]}
+          field={quickViewData.first_name}
           className="text-lg font-bold "
         />
         <QuickViewItem
-          className="pl-2 pr-1 font-bold"
-          field={quickViewData["last_name"]}
+          className="pl-2 pr-1 font-bold text-lg "
+          field={quickViewData.last_name}
         />
         <FiGlobe className="text-black1" />
       </p>
-      <p className="text-sm flex items-center gap-2">
+      <p className="text-sm flex items-center justify-center flex-wrap gap-2">
         <FaBriefcase />
-        <span>
-          <QuickViewItem field={quickViewData.job_position} /> at{" "}
-          <QuickViewItem field={quickViewData.account_name} /> with{" "}
-          <QuickViewItem field={quickViewData.employee_number} /> employees
-        </span>
+        <QuickViewItem field={quickViewData.job_position} /> at{" "}
+        <QuickViewItem field={quickViewData.account_name} /> with{" "}
+        <QuickViewItem field={quickViewData.employee_number} /> employees
       </p>
       <p className=" text-sm flex items-center gap-2">
         <IoMailSharp />

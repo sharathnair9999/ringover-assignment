@@ -29,6 +29,12 @@ const RingoverProvider = ({ children }) => {
     },
     sendbackSalesforceItem = (item) => {
       dispatch({ type: "SENDBACK_SALESFORCE_ITEM", payload: item });
+    },
+    moveWithinCadence = (isDestinationEmpty, src, dest) => {
+      dispatch({
+        type: "MOVE_WITHIN_CADENCE",
+        payload: { isDestinationEmpty, src, dest },
+      });
     };
 
   const value = {
@@ -41,6 +47,7 @@ const RingoverProvider = ({ children }) => {
     mouseLeaveInQuickView,
     sendbackSalesforceItem,
     addToCadence,
+    moveWithinCadence,
   };
   return (
     <RingoverContext.Provider value={value}>

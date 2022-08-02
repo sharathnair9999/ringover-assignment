@@ -33,7 +33,6 @@ const RingoverField = ({ field, index }) => {
                 <span
                   onClick={() => {
                     handleSFClick(field);
-                    console.log(field);
                   }}
                   className={`${
                     selectedSFData.data.data === field[1].data.data &&

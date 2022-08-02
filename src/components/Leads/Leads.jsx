@@ -13,6 +13,10 @@ const Leads = () => {
     handleSFClick,
   } = useRingover();
 
+  const isRingoverValuesEmpty = Object.values(ringoverCadence).every(
+    (value) => !value.data.data
+  );
+
   const [salesforceSearch, setSalesforceSearch] = useState("");
   const [ringoverSearch, setRingoverSearch] = useState("");
 
@@ -21,7 +25,6 @@ const Leads = () => {
   useEffect(() => {
     const handleKeyDown1 = (e) => {
       if (e.key === "Backspace" && selectedSFData.data.data !== "") {
-        console.log(selectedSFData);
         sendbackSalesforceItem(selectedSFData);
         handleSFClick([selectedSFData.field]);
       }
@@ -44,9 +47,11 @@ const Leads = () => {
           <section className="flex justify-evenly items-start w-full relative">
             <p className="text-lightBlue2">Ringover Fields</p>
             <p className="text-lightBlue2">Salesforce Fields</p>
-            <p className="absolute right-[25%] flex translate-x-1/2  bottom-0 top-10  rounded-lg p-2 text-lightBlue2/50 ">
-              <span className="inline-block mb-30">Place Here</span>
-            </p>
+            {isRingoverValuesEmpty && (
+              <p className="absolute right-[25%]  translate-x-1/2  w-1/3 outline-2 top-9 text-center outline-dashed rounded-lg px-4 py-1 text-lightBlue2/50 ">
+                Place Here
+              </p>
+            )}
           </section>
 
           <div className="flex flex-col w-11/12 gap-2 justify-center mt-2">
@@ -67,7 +72,9 @@ const Leads = () => {
             ref={provided.innerRef}
             className="salesforce w-1/4 bg-white  flex p-3 justify-start items-start flex-col gap-2 overflow-auto"
           >
-            <p className="font-semibold text-md">Salesforce</p>
+            <p className="font-semibold text-md text-center w-full">
+              Salesforce
+            </p>
             <SearchField
               searchTerm={salesforceSearch}
               setSearch={setSalesforceSearch}

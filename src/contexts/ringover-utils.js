@@ -9,14 +9,11 @@ export const ringoverReducer = (state, action) => {
 
     case "CLICK_SALESFORCE_ITEM":
       if (state.selectedSFData.field === payload[0]) {
-        console.log(payload);
         return {
           ...state,
           selectedSFData: { field: "", data: { id: "", data: "" } },
         };
       } else {
-        console.log(payload);
-
         return {
           ...state,
           selectedSFData: {
@@ -45,8 +42,6 @@ export const ringoverReducer = (state, action) => {
       };
     case "SENDBACK_SALESFORCE_ITEM":
       let { field, data } = payload;
-      console.log(field);
-      console.log(data);
       return {
         ...state,
         salesforceData: [...state.salesforceData, data],
@@ -57,6 +52,40 @@ export const ringoverReducer = (state, action) => {
             data: { id: "", data: "" },
           },
         },
+      };
+    case "MOVE_WITHIN_CADENCE":
+      let { isDestinationEmpty, src, dest } = payload;
+      let itemToMove = state.ringoverCadence[src].data;
+      let newRingoverCadence;
+      if (isDestinationEmpty) {
+        newRingoverCadence = {
+          ...state.ringoverCadence,
+          [dest]: {
+            ...state.ringoverCadence[dest],
+            data: itemToMove,
+          },
+          [src]: {
+            ...state.ringoverCadence[src],
+            data: { id: "", data: "" },
+          },
+        };
+        return { ...state, ringoverCadence: newRingoverCadence };
+      }
+      let itemToMove2 = state.ringoverCadence[dest].data;
+      newRingoverCadence = {
+        ...state.ringoverCadence,
+        [src]: {
+          ...state.ringoverCadence[src],
+          data: itemToMove2,
+        },
+        [dest]: {
+          ...state.ringoverCadence[dest],
+          data: itemToMove,
+        },
+      };
+      return {
+        ...state,
+        ringoverCadence: newRingoverCadence,
       };
     default:
       return state;

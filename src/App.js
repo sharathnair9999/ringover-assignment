@@ -15,6 +15,7 @@ function App() {
     state: { ringoverCadence },
     sendbackSalesforceItem,
     addToCadence,
+    moveWithinCadence,
   } = useRingover();
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
@@ -33,11 +34,24 @@ function App() {
       return;
     }
     // Case 3 : If the source and destination is the cadence itself
-    if (Object.keys(ringoverCadence).includes(destination.droppableId)) {
+    if (
+      Object.keys(ringoverCadence).includes(source.droppableId) &&
+      Object.keys(ringoverCadence).includes(destination.droppableId)
+    ) {
+      // Case 0 : If the source and destination are the same
+      if (source.droppableId === destination.droppableId) {
+        return;
+      }
+
       // Case 1 : The destination doesnt have any corresponding value attached
       if (!ringoverCadence[destination.droppableId].data.data) {
-        // Case 2 : The destination has a value attached.
-      } else {
+        moveWithinCadence(true, source.droppableId, destination.droppableId);
+        return;
+      }
+
+      // Case 2 : The destination has a value attached.
+      else {
+        moveWithinCadence(false, source.droppableId, destination.droppableId);
         return;
       }
     }
